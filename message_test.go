@@ -12,7 +12,8 @@ var _ = Describe("Wamp", func() {
 		var v MessagePart
 		Context("Integer", func() {
 			It("Should work for 0", func() {
-				v = Integer(0)
+				i := Integer(0)
+				v = &i
 				Expect(v.Value()).To(Equal(Integer(0)))
 				Expect(v.Validate()).ToNot(HaveOccurred())
 			})
@@ -20,11 +21,13 @@ var _ = Describe("Wamp", func() {
 
 		Context("Id", func() {
 			It("Should work for 0", func() {
-				v = Id(0)
+				i := Id(0)
+				v = &i
 				Expect(v.Validate()).ToNot(HaveOccurred())
 			})
 			It("Should not work for MaxId + 1", func() {
-				v = Id(MaxId + 1)
+				i := Id(MaxId + 1)
+				v = &i
 				Expect(v.Validate()).To(HaveOccurred())
 				Expect(MaxId).To(BeEquivalentTo(1 << 53))
 			})
@@ -32,27 +35,33 @@ var _ = Describe("Wamp", func() {
 
 		Context("Uri", func() {
 			It("Should work for abc", func() {
-				v = Uri("abc")
+				u := Uri("abc")
+				v = &u
 				Expect(v.Validate()).ToNot(HaveOccurred())
 			})
 			It("Should work for abc.def.ghi", func() {
-				v = Uri("abc.def.ghi")
+				u := Uri("abc.def.ghi")
+				v = &u
 				Expect(v.Validate()).ToNot(HaveOccurred())
 			})
 			It("Should not work for .abc.def", func() {
-				v = Uri(".abc.def")
+				u := Uri(".abc.def")
+				v = &u
 				Expect(v.Validate()).To(HaveOccurred())
 			})
 			It("Should not work for abc.#def", func() {
-				v = Uri("abc.#def")
+				u := Uri("abc.#def")
+				v = &u
 				Expect(v.Validate()).To(HaveOccurred())
 			})
 			It("Should not work for a bc.def", func() {
-				v = Uri("a bc.def")
+				u := Uri("a bc.def")
+				v = &u
 				Expect(v.Validate()).To(HaveOccurred())
 			})
 			It("Should not work for abc..def", func() {
-				v = Uri("abc..def")
+				u := Uri("abc..def")
+				v = &u
 				Expect(v.Validate()).To(HaveOccurred())
 			})
 		})
